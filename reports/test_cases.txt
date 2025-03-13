@@ -1,0 +1,200 @@
+1. Verify User Registration with Valid Data
+Objective: Ensure a user can successfully register with valid details.
+
+Steps:
+
+Navigate to the Automation Test Store homepage.
+Click on "Login or register".
+Click on the "Continue" button under "New Customer".
+Fill in all required details (First Name, Last Name, Email, Telephone, etc.).
+Set a strong password and confirm it.
+Check the privacy policy agreement.
+Click on the "Continue" button.
+Verify that a success message appears confirming account creation.
+Try logging in with the newly registered credentials.
+Verify successful login by checking the My Account page.
+
+2. Verify Login with Invalid Credentials
+Objective: Ensure an error message appears when logging in with incorrect credentials.
+
+Steps:
+
+Navigate to the Login page.
+Enter an invalid email address (e.g., invalid@example.com).
+Enter an incorrect password (e.g., WrongPassword123).
+Click on the "Login" button.
+Verify that an error message appears stating "Invalid login credentials".
+Try logging in again using another incorrect password.
+Verify that the login attempt still fails.
+
+3. Add a Product to the Shopping Cart and Verify
+Objective: Ensure that a selected product is successfully added to the shopping cart.
+
+Steps:
+
+Navigate to the homepage.
+Search for any product (e.g., "Perfume").
+Click on the product name to open the product details page.
+Select a quantity (if applicable).
+Click on "Add to Cart".
+Verify the success message appears.
+Open the Shopping Cart page.
+Verify that the correct product name, price, and quantity are displayed.
+
+
+4. Remove a Product from the Shopping Cart
+Objective: Ensure a user can remove an item from the shopping cart.
+
+Steps:
+
+Navigate to the homepage.
+Add any product to the cart.
+Go to the Shopping Cart page.
+Click on the "Remove" (X) button next to the product.
+Verify that the item is successfully removed.
+Check that the cart total is updated correctly.
+
+5. Verify Checkout Process with a Registered User
+Objective: Ensure that a registered user can complete the checkout process.
+
+Steps:
+
+Login to an existing registered account.
+Add any product to the cart.
+Click on "Checkout".
+Verify that the billing address and shipping address are pre-filled.
+Select the Shipping Method.
+Choose a Payment Method (if available).
+Agree to the Terms & Conditions.
+Click on "Confirm Order".
+Verify that an order confirmation message appears.
+
+
+6. Verify Product Search Functionality
+Objective: Ensure that users can search for products using the search bar.
+
+Steps:
+
+Navigate to the homepage.
+Locate the search bar.
+Enter a product name (e.g., "Shampoo").
+Click on the Search button.
+Verify that the search results display relevant products.
+Click on a product to open the product details page.
+Verify that the product name matches the search query.
+
+7. Verify Sorting Products by Price
+Objective: Ensure that users can sort products by price from low to high.
+
+Steps:
+
+Navigate to a category page (e.g., Skincare).
+Locate the Sort By dropdown menu.
+Select "Price: Low to High".
+Verify that products are sorted in ascending order.
+Change sorting to "Price: High to Low".
+Verify that products are now sorted in descending order.
+
+8. Verify Wishlist Functionality
+Objective: Ensure that users can add products to their wishlist.
+
+Steps:
+
+Login to a registered account.
+Navigate to a product category.
+Click on the "Add to Wishlist" button for a product.
+Navigate to the Wishlist page.
+Verify that the product appears in the wishlist.
+Click on the Remove button to delete the product from the wishlist.
+Verify that the wishlist is now empty.
+
+
+9. Verify Newsletter Subscription
+Objective: Ensure that users can subscribe to the newsletter.
+
+Steps:
+
+Scroll down to the Newsletter Subscription section.
+Enter a valid email address.
+Click on the Subscribe button.
+Verify that a success message appears confirming the subscription.
+Try subscribing with the same email again.
+Verify that a "You are already subscribed" message appears.
+
+10. Verify Contact Us Form Submission
+Objective: Ensure that users can submit the contact form successfully.
+
+Steps:
+
+Navigate to the "Contact Us" page.
+Fill in the required fields (Name, Email, Enquiry).
+Click on Submit.
+Verify that a success message appears confirming submission.
+Check the email inbox for an automated response (if applicable).
+
+
+11. Verify Order History for a Registered User
+Objective: Ensure that users can view their previous orders.
+
+Steps:
+
+Login to an existing account.
+Navigate to "My Account" → "Order History".
+Verify that the list of past orders is displayed.
+Click on an order to view its details.
+Verify that order details (products, total price, status) are correct.
+
+12. Verify Reset Password Functionality
+Objective: Ensure that users can reset their password.
+
+Steps:
+
+Navigate to the Login page.
+Click on "Forgotten Password".
+Enter a registered email address.
+Click Submit.
+Verify that an email confirmation message appears.
+Check the inbox for a password reset email.
+Click on the reset link and set a new password.
+Try logging in with the new password.
+
+13. Verify Applying a Coupon Code
+Objective: Ensure that users can apply a discount coupon.
+
+Steps:
+
+Add a product to the cart.
+Navigate to the Shopping Cart page.
+Enter a valid coupon code.
+Click on Apply Coupon.
+Verify that the discount is applied to the cart total.
+Try using an expired or invalid coupon.
+Verify that an error message appears.
+
+
+14. Verify Changing the Currency
+Objective: Ensure that users can change the store currency.
+
+Steps:
+
+Locate the Currency dropdown at the top of the page.
+Select a different currency (e.g., Euro (€) instead of USD).
+Verify that all product prices are updated to the selected currency.
+Add a product to the cart and proceed to checkout.
+Verify that the order total reflects the correct currency.
+
+
+15. Verify Guest Checkout Without Registration
+Objective: Ensure that users can checkout without creating an account.
+
+Steps:
+
+Add a product to the cart.
+Click on Checkout.
+Select "Checkout as Guest".
+Enter billing and shipping details.
+Select Shipping Method.
+Choose a Payment Method.
+Agree to Terms & Conditions.
+Click Confirm Order.
+Verify that the order is placed successfully without an account.
