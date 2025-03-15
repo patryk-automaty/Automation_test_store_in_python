@@ -46,6 +46,11 @@ class RegisterUserPage(BasePage):
         self.send_keys(*self._email_input, email)
         self.send_keys(*self._fax_input, fax)
 
+    def input_address(self, company, address1, address2, city, region, zipcode, country):
+        pass
+
+    def click_continue(self):
+        self.click(self._continue_button)
 
 
 
