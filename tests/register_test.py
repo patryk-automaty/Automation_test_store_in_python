@@ -5,6 +5,7 @@ from pages.login_page import LoginPage
 from pages.register_user_page import RegisterUserPage
 from utils.config import Config
 from utils.driver_factory import get_driver
+from utils.helper_tools import HelperTools
 
 
 class RegisterTest(unittest.TestCase):
@@ -28,6 +29,22 @@ class RegisterTest(unittest.TestCase):
         cls.driver.quit()
 
     def test_register_user_with_valid_data(self):
+
+        helper_tool = HelperTools()
+
+
+        generated_data = helper_tool.register_user_data_generator()
+        helper_tool.save_test_data_to_json(generated_data)
+
+
+        user_data = helper_tool.get_last_saved_data()
+
         self.home_page.go_to_login_page()
         self.login_page.click_continue()
-        self.register_page.input_personal_details(self.first_name, self.last_name, self.email, self.telephone, self.fax)
+        self.register_page.input_personal_details(
+            user_data["first_name"],
+            user_data["last_name"],
+            user_data["email"],
+            user_data["telephone"],
+            user_data["fax"]
+        )

@@ -1,11 +1,12 @@
 import json
+import os
 import random
 import string
 from faker import Faker
 
 class HelperTools:
 
-    def __init__(self, filename = "test_data.json"):
+    def __init__(self, filename = os.path.join(os.path.dirname(__file__), "../model/user_data.json")):
         self.fake = Faker()
         self.filename = filename
 
@@ -55,3 +56,32 @@ class HelperTools:
 
         with open(self.filename, 'w') as file:
             json.dump(existing_data, file, indent=4)
+
+
+    def load_data_from_json(self,index):
+        with open(self.filename, 'r') as file:
+            data = json.load(file)
+
+            for entry in data:
+                if entry["index"] == index:
+                    return entry["data"]
+            return None
+
+    def get_last_saved_data(self):
+        try:
+            with open(self.filename, 'r') as file:
+                data = json.load(file)
+
+            if data:
+                return data[-1]["data"]
+            else:
+                return None
+
+        except FileNotFoundError:
+            print("File not exist")
+            return None
+
+    def register_user_data_generator_for_test(self):
+        self.save_test_data_to_json(self.register_user_data_generator())
+        return self.get_last_saved_data()
+
