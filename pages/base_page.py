@@ -1,13 +1,18 @@
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
+
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
 
 from utils.driver_factory import get_driver
 
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
+        self.actions = ActionChains(driver)
 
-    def find_element(self, by, value):
-        return self.driver.find_element(by, value)
+    def find_element(self, by, locator):
+        return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((by, locator)))
 
     def click(self, locator):
         self.find_element(*locator).click()
@@ -18,9 +23,9 @@ class BasePage:
     def get_text(self, by, value):
         return self.find_element(by, value).text
 
-    def select(self, by, value, selection_type="text"):
+    def select(self, by, locator, value, selection_type="index"):
 
-        element = self.find_element(by, value)
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((by, locator)))
         select_element = Select(element)
 
         if selection_type == "text":
@@ -31,3 +36,7 @@ class BasePage:
             select_element.select_by_index(int(value))  # Select by option index
         else:
             raise ValueError("Invalid selection_type. Use 'text', 'value', or 'index'.")
+
+    def hover(self, by, locator):
+        element = self.find_element(by, locator)
+        self.actions.move_to_element(element).pause(1).perform()

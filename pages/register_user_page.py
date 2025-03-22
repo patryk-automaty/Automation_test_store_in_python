@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
@@ -17,9 +19,9 @@ class RegisterUserPage(BasePage):
     _address1_input = (By.ID, "AccountFrm_address_1")
     _address2_input = (By.ID, "AccountFrm_address_2")
     _city_input = (By.ID, "AccountFrm_city")
-    _region_select = (By.ID, "AccountFrm_zone_id")
+    _region_select = (By.XPATH, "//select[@id='AccountFrm_zone_id']")
     _zipcode_input = (By.ID, "AccountFrm_postcode")
-    _country_select = (By.ID, "AccountFrm_country_id")
+    _country_select = (By.XPATH, "//select[@id='AccountFrm_country_id']")
     # Login Details
     _login_name_input = (By.ID, "AccountFrm_loginname")
     _password_input = (By.ID, "AccountFrm_password")
@@ -43,11 +45,28 @@ class RegisterUserPage(BasePage):
         self.send_keys(*self._last_name_input, last_name)
         self.send_keys(*self._email_input, email)
         self.send_keys(*self._telephone_input, telephone)
-        self.send_keys(*self._email_input, email)
         self.send_keys(*self._fax_input, fax)
 
+
     def input_address(self, company, address1, address2, city, region, zipcode, country):
-        pass
+        self.select(*self._country_select, country, selection_type="text")
+        self.send_keys(*self._company_input, company)
+        self.send_keys(*self._address1_input, address1)
+        self.send_keys(*self._address2_input, address2)
+        self.send_keys(*self._city_input, city)
+        self.select(*self._region_select, region, selection_type="text")
+        self.send_keys(*self._zipcode_input, zipcode)
+
+    def login_details(self, login_name, password, confirm_password):
+        self.send_keys(*self._login_name_input, login_name)
+        self.send_keys(*self._password_input, password)
+        self.send_keys(*self._password_confirm_input, confirm_password)
+
+    def newsletter_and_privacy_policy(self, subscribe, privacy_policy):
+        self.click(self._subscribe_radiobutton_yes if subscribe else self._subscribe_radiobutton_no)
+        if privacy_policy:
+            self.click(self._agree_privacy_policy_checkbox)
+
 
     def click_continue(self):
         self.click(self._continue_button)
