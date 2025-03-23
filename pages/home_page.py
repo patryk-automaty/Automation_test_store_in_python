@@ -21,8 +21,13 @@ class HomePage(BasePage):
     def logout_from_navbar(self):
         self.click(self._logout_navbar)
 
-    def choose_category_from_subnav(self):
-        print(self.find_elements(*self._subnav_list))
+    def choose_category_from_subnav(self, category_name):
+        categories = self.find_elements(*self._subnav_list)
+
+        for category in categories:
+            if category.text.strip() == category_name:
+                category.click()
+                break
 
 
 

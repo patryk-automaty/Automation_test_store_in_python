@@ -44,3 +44,7 @@ class BasePage:
         self.actions.move_to_element(locator).perform()
         dropdown_option = self.find_element(*dropdown_option_locator)
         dropdown_option.click()
+
+    def clear_input(self, locator):
+        self.find_element(*locator).clear()
+
