@@ -32,8 +32,7 @@ Objective: Ensure that a selected product is successfully added to the shopping 
 
 Steps:
 
-Navigate to the homepage.
-Search for any product (e.g., "Perfume").
+Navigate to the fragrance page
 Click on the product name to open the product details page.
 Select a quantity (if applicable).
 Click on "Add to Cart".

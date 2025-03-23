@@ -14,6 +14,9 @@ class BasePage:
     def find_element(self, by, locator):
         return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((by, locator)))
 
+    def find_elements(self, by, locator):
+        return WebDriverWait(self.driver, 10).until(EC.presence_of_all_elements_located((by, locator)))
+
     def click(self, locator):
         self.find_element(*locator).click()
 
@@ -37,6 +40,7 @@ class BasePage:
         else:
             raise ValueError("Invalid selection_type. Use 'text', 'value', or 'index'.")
 
-    def hover(self, by, locator):
-        element = self.find_element(by, locator)
-        self.actions.move_to_element(element).pause(1).perform()
+    def hover_and_choose(self, locator, dropdown_option_locator):
+        self.actions.move_to_element(locator).perform()
+        dropdown_option = self.find_element(*dropdown_option_locator)
+        dropdown_option.click()
