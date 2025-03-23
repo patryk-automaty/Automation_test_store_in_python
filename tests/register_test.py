@@ -1,6 +1,6 @@
 
 import unittest
-import time
+
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.my_account_page import MyAccountPage
@@ -16,9 +16,11 @@ class RegisterTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        browser = Config.get_browser()
-        cls.driver = get_driver(browser)
-        cls.driver.get(Config.get_base_url())
+        browser = Config.get_browser() # Get browser type from configuration
+        cls.driver = get_driver(browser) # Initialize WebDriver
+        cls.driver.get(Config.get_base_url()) # Open the base url from config
+
+        # Initialize page objects
         cls.home_page = HomePage(cls.driver)
         cls.register_page = RegisterUserPage(cls.driver)
         cls.login_page = LoginPage(cls.driver)
@@ -28,7 +30,7 @@ class RegisterTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.driver.quit()
+        cls.driver.quit() # close the browser session
 
     # tc 1
     def test_register_user_with_valid_data(self):
