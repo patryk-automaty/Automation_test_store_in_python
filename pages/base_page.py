@@ -48,3 +48,6 @@ class BasePage:
     def clear_input(self, locator):
         self.find_element(*locator).clear()
 
+    def get_value(self, locator):
+        self.find_element(*locator).get_attribute("value")
+

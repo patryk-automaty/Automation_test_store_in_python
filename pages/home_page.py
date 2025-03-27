@@ -1,3 +1,5 @@
+import random
+
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
@@ -7,10 +9,12 @@ class HomePage(BasePage):
     _login_register_navbar = (By.ID, "customer_menu_top")
     _specials_navbar = (By.XPATH, "//div[@id='topnav']//li[@data-id='menu_specials']")
     _account_navbar = (By.XPATH, "//div[@id='topnav']//li[@data-id='menu_account']")
-    _cart_navbar = (By.XPATH, "//div[@id='topnav']//li[@data-id='menu_account']")
+    _cart_navbar = (By.XPATH, "//div[@id='topnav']//li[@data-id='menu_cart']")
     _checkout_navbar = (By.XPATH, "//div[@id='topnav']//li[@data-id='menu_checkout']")
     _logout_navbar = (By.XPATH, "//ul[@id='main_menu']//span[(@class='menu_text') and (text()='Logout')]")
     _subnav_list = (By.XPATH, "//ul[@class='nav-pills categorymenu']/li/a")
+    _add_product = (By.XPATH, "//i[@class='fa fa-cart-plus fa-fw']")
+    _go_to_home_page = (By.XPATH, "//img[@title='Automation Test Store']")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -29,6 +33,15 @@ class HomePage(BasePage):
                 category.click()
                 break
 
+    def add_random_product(self):
+        products = self.find_elements(*self._add_product)
+        random_product = random.choice(products)
+        random_product.click()
 
+    def go_to_shopping_cart(self):
+        self.click(self._cart_navbar)
+
+    def go_to_home_page(self):
+        self.click(self._go_to_home_page)
 
 
