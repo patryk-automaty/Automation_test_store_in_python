@@ -128,4 +128,3 @@ Navigate to the "Contact Us" page.
 Fill in the required fields (Name, Email, Enquiry).
 Click on Submit.
 Verify that a success message appears confirming submission.
-Check the email inbox for an automated response (if applicable).

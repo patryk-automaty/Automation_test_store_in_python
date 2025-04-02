@@ -15,6 +15,8 @@ class HomePage(BasePage):
     _subnav_list = (By.XPATH, "//ul[@class='nav-pills categorymenu']/li/a")
     _add_product = (By.XPATH, "//i[@class='fa fa-cart-plus fa-fw']")
     _go_to_home_page = (By.XPATH, "//img[@title='Automation Test Store']")
+    _search_bar = (By.ID, "filter_keyword")
+    _search_perform = (By.XPATH, "//div[@title='Go']")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -44,4 +46,7 @@ class HomePage(BasePage):
     def go_to_home_page(self):
         self.click(self._go_to_home_page)
 
+    def search_product(self, search_input):
+        self.send_keys(*self._search_bar, search_input)
+        self.click(self._search_perform)
 

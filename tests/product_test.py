@@ -10,9 +10,10 @@ from pages.logout_page import LogoutPage
 from pages.product_page import ProductPage
 from utils.config import Config
 from utils.driver_factory import get_driver
-from utils.helper_tools import HelperTools
 from pages.checkout_confirmation_page import CheckoutPage
 from pages.success_order_page import SuccessOrderPage
+from pages.search_page import SearchPage
+from pages.product_details_page import ProductDetailsPage
 
 class RegisterTest(unittest.TestCase):
 
@@ -32,6 +33,8 @@ class RegisterTest(unittest.TestCase):
         cls.product_page = ProductPage(cls.driver)
         cls.checkout_page = CheckoutPage(cls.driver)
         cls.success_order_page = SuccessOrderPage(cls.driver)
+        cls.search_page = SearchPage(cls.driver)
+        cls.product_details_page = ProductDetailsPage(cls.driver)
 
     @classmethod
     def tearDownClass(cls):
@@ -112,3 +115,22 @@ class RegisterTest(unittest.TestCase):
         self.checkout_page.click_confirm()
         # Verify that an order confirmation message appears.
         self.assertIn("Your Order Has Been Processed!", self.success_order_page.get_success_order_message())
+
+    # tc 6
+    def test_verify_product_search_func(self):
+
+        # Locate the search bar and Enter a product name (e.g., "Shampoo").
+        search_text = "Shampoo"
+        self.home_page.search_product(search_text)
+        # Verify that the search results display relevant products.
+        displayed_products = [products for products in self.search_page.searched_product_names() if products.is_displayed()]
+        self.assertTrue(len(displayed_products) > 0)
+        # Click on a product to open the product details page.
+        products = [prod for prod in self.search_page.searched_product_names()]
+        products[0].click()
+        # Verify that the product name matches the search query.
+        product_name = self.product_details_page.get_product_name()
+        self.assertIn(search_text.lower(), product_name.lower())
+
+
+        
