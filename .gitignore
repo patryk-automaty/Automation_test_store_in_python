@@ -7,3 +7,5 @@
 /.idea/modules.xml
 /.idea/inspectionProfiles/profiles_settings.xml
 /model/user_data.json
+__pycache__/
+*.pyc
