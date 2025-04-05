@@ -32,13 +32,11 @@ Objective: Ensure that a selected product is successfully added to the shopping 
 
 Steps:
 
-Navigate to the homepage.
-Search for any product (e.g., "Perfume").
+Navigate to the fragrance page
 Click on the product name to open the product details page.
 Select a quantity (if applicable).
 Click on "Add to Cart".
-Verify the success message appears.
-Open the Shopping Cart page.
+Verify that shopping cart is open
 Verify that the correct product name, price, and quantity are displayed.
 
 
@@ -130,71 +128,3 @@ Navigate to the "Contact Us" page.
 Fill in the required fields (Name, Email, Enquiry).
 Click on Submit.
 Verify that a success message appears confirming submission.
-Check the email inbox for an automated response (if applicable).
-
-
-11. Verify Order History for a Registered User
-Objective: Ensure that users can view their previous orders.
-
-Steps:
-
-Login to an existing account.
-Navigate to "My Account" → "Order History".
-Verify that the list of past orders is displayed.
-Click on an order to view its details.
-Verify that order details (products, total price, status) are correct.
-
-12. Verify Reset Password Functionality
-Objective: Ensure that users can reset their password.
-
-Steps:
-
-Navigate to the Login page.
-Click on "Forgotten Password".
-Enter a registered email address.
-Click Submit.
-Verify that an email confirmation message appears.
-Check the inbox for a password reset email.
-Click on the reset link and set a new password.
-Try logging in with the new password.
-
-13. Verify Applying a Coupon Code
-Objective: Ensure that users can apply a discount coupon.
-
-Steps:
-
-Add a product to the cart.
-Navigate to the Shopping Cart page.
-Enter a valid coupon code.
-Click on Apply Coupon.
-Verify that the discount is applied to the cart total.
-Try using an expired or invalid coupon.
-Verify that an error message appears.
-
-
-14. Verify Changing the Currency
-Objective: Ensure that users can change the store currency.
-
-Steps:
-
-Locate the Currency dropdown at the top of the page.
-Select a different currency (e.g., Euro (€) instead of USD).
-Verify that all product prices are updated to the selected currency.
-Add a product to the cart and proceed to checkout.
-Verify that the order total reflects the correct currency.
-
-
-15. Verify Guest Checkout Without Registration
-Objective: Ensure that users can checkout without creating an account.
-
-Steps:
-
-Add a product to the cart.
-Click on Checkout.
-Select "Checkout as Guest".
-Enter billing and shipping details.
-Select Shipping Method.
-Choose a Payment Method.
-Agree to Terms & Conditions.
-Click Confirm Order.
-Verify that the order is placed successfully without an account.
