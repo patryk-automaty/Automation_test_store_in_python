@@ -15,6 +15,7 @@ from pages.success_order_page import SuccessOrderPage
 from pages.search_page import SearchPage
 from pages.product_details_page import ProductDetailsPage
 from utils.helper_tools import HelperTools
+from pages.wishlist_page import WishlistPage
 
 class RegisterTest(unittest.TestCase):
 
@@ -36,13 +37,15 @@ class RegisterTest(unittest.TestCase):
         cls.success_order_page = SuccessOrderPage(cls.driver)
         cls.search_page = SearchPage(cls.driver)
         cls.product_details_page = ProductDetailsPage(cls.driver)
+        cls.wishlist_page = WishlistPage(cls.driver)
         cls.helper_tool = HelperTools()
+
 
     @classmethod
     def tearDownClass(cls):
         cls.driver.quit() # close the browser session
 
-
+    # tc 8
     def test_wishlist_func(self):
         # Retrieve the last saved data
         user_data = self.helper_tool.get_last_saved_data()
@@ -64,5 +67,10 @@ class RegisterTest(unittest.TestCase):
         self.home_page.go_to_account_page()
         self.my_account_page.wishlist_from_my_account_box()
         # Verify that the product appears in the wishlist
+        self.assertTrue(self.wishlist_page.get_product_name().is_displayed())
         # Click on the Remove button to delete the product from the wishlist
+        self.wishlist_page.remove_product()
         # Verify that the wishlist is now empty
+        self.assertFalse(self.wishlist_page.get_product_name().is_displayed())
+
+    # tc 9
