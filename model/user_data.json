@@ -30,21 +30,5 @@
             "login_name": "raymond684",
             "password": "23OC4Nlg"
         }
-    },
-    {
-        "index": 3,
-        "data": {
-            "first_name": "Daniel",
-            "last_name": "Baker",
-            "email": "brownbrandi@example.com",
-            "telephone": "309.665.1568x635",
-            "fax": "7066570854",
-            "company": "Guzman, Ross and Cisneros",
-            "address": "601 Pope Key Apt. 335\nEast Edwardland, IN 94699",
-            "city": "Glennport",
-            "zipcode": "05476",
-            "login_name": "daniel898",
-            "password": "7PgKmgZz"
-        }
     }
 ]

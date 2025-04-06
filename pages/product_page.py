@@ -22,6 +22,10 @@ class ProductPage(BasePage):
     _remove_button = (By.XPATH, "//i[@class='fa fa-trash-o fa-fw']")
     _empty_cart_message = (By.XPATH, "//div[contains(text(), 'Your shopping cart is empty')]")
     _checkout_button_1 = (By.ID, "cart_checkout1")
+    _add_to_wishlist_button = (By.XPATH, "//a[@class='wishlist_add btn btn-large']")
+    _wishlist_from_logged_user = (By.XPATH, "//a[contains(text(),'My wish list')]")
+    _logged_user_main_menu = (By.XPATH, "//div[@class='menu_text']")
+
 
 
     def open_product_details(self, product_name):
@@ -119,3 +123,7 @@ class ProductPage(BasePage):
             prices.append(float(price_text))
 
         return prices == sorted(prices, reverse=True)
+
+    def add_product_to_wishlist(self):
+        self.click(self._add_to_wishlist_button)
+

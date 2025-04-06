@@ -145,3 +145,4 @@ class RegisterTest(unittest.TestCase):
         self.product_page.sort_by_price_desc()
         # Verify that products are now sorted in descending order.
         self.assertTrue(self.product_page.are_products_sorted_desc_by_price())
+
