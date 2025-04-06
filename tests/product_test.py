@@ -132,5 +132,16 @@ class RegisterTest(unittest.TestCase):
         product_name = self.product_details_page.get_product_name()
         self.assertIn(search_text.lower(), product_name.lower())
 
+    # tc 7
+    def test_sorting_product_by_price(self):
 
-        
+        # Navigate to a category page (e.g., Skincare).
+        self.home_page.choose_category_from_subnav("SKINCARE")
+        # Locate the Sort By dropdown menu and select "Price: Low to High".
+        self.product_page.sort_by_price_asc()
+        # Verify that products are sorted in ascending order.
+        self.assertTrue(self.product_page.are_products_sorted_asc_by_price())
+        # Change sorting to "Price: High to Low".
+        self.product_page.sort_by_price_desc()
+        # Verify that products are now sorted in descending order.
+        self.assertTrue(self.product_page.are_products_sorted_desc_by_price())

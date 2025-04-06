@@ -9,6 +9,12 @@ class ProductPage(BasePage):
     _product_details_quantity = (By.ID, "product_quantity")
     _product_details_add_to_cart_button = (By.XPATH, "//ul[@class='productpagecart']")
     _shopping_cart_header = (By.XPATH, "//span[contains(text(), 'Shopping Cart')]")
+    _sort_by_select = (By.ID, "sort")
+    _product_prices = (By.CLASS_NAME, "price")
+    _new_product_price = (By.XPATH, "//div[@class='pricetag jumbotron']//div[@class='pricenew']")
+    _one_product_price = (By.XPATH, "//div[@class='pricetag jumbotron']//div[@class='oneprice']")
+
+
 
     _product_name_from_details = (By.XPATH, "//tr/td[@class='align_left']/a")
     _quantity_from_details = (By.XPATH, "//td/div[@class='input-group input-group-sm']/input")
@@ -74,5 +80,42 @@ class ProductPage(BasePage):
     def click_checkout(self):
         self.click(self._checkout_button_1)
 
+    def sort_by_price_asc(self):
+        self.select(*self._sort_by_select, value="p.price-ASC", selection_type="value")
 
+    def sort_by_price_desc(self):
+        self.select(*self._sort_by_select, value="p.price-DESC", selection_type="value")
 
+    def are_products_sorted_asc_by_price(self):
+        product_containers = self.find_elements(*self._product_prices)
+
+        prices = []
+
+        for container in product_containers:
+            try:
+                price_element = container.find_element(*self._new_product_price)
+
+            except:
+                price_element = container.find_element(*self._one_product_price)
+
+            price_text = price_element.text.strip().replace("$", "")
+            prices.append(float(price_text))
+
+        return prices == sorted(prices)
+
+    def are_products_sorted_desc_by_price(self):
+        product_containers = self.find_elements(*self._product_prices)
+
+        prices = []
+
+        for container in product_containers:
+            try:
+                price_element = container.find_element(*self._new_product_price)
+
+            except:
+                price_element = container.find_element(*self._one_product_price)
+
+            price_text = price_element.text.strip().replace("$", "")
+            prices.append(float(price_text))
+
+        return prices == sorted(prices, reverse=True)
