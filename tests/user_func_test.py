@@ -72,5 +72,5 @@ class RegisterTest(unittest.TestCase):
         self.wishlist_page.remove_product()
         self.assertFalse(
             self.wishlist_page.get_product_name().is_displayed(),
-            "Expected wishlist to be empty after removing the product"
+            "Expected wishlist to be empty after removing the product123"
         )
