@@ -2,11 +2,11 @@ import unittest
 
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
-from pages.my_account_page import MyAccountPage
 from pages.register_user_page import RegisterUserPage
 from pages.logout_page import LogoutPage
 from pages.product_page import ProductPage
 from pages.wishlist_page import WishlistPage
+from pages.my_account_page import MyAccountPage
 from utils.config import Config
 from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
@@ -35,7 +35,7 @@ class RegisterTest(unittest.TestCase):
     def tearDownClass(cls):
         cls.driver.quit()
 
-
+    # tc 8
     def test_wishlist_func(self):
 
 
@@ -72,5 +72,38 @@ class RegisterTest(unittest.TestCase):
         self.wishlist_page.remove_product()
         self.assertFalse(
             self.wishlist_page.get_product_name().is_displayed(),
-            "Expected wishlist to be empty after removing the product123"
+            "Expected wishlist to be empty after removing the product"
         )
+
+    # tc 9
+
+    def test_newsletter_sub(self):
+
+        # Get test user data
+        user_data = self.helper_tool.get_last_saved_data()
+        login = user_data["login_name"]
+        password = user_data["password"]
+        email = user_data["email"]
+
+        # Expected results to assertion
+        expected_notification_page_header = "NOTIFICATIONS AND NEWSLETTER"
+        expected_success_message = "Success: Your notification settings has been successfully updated!"
+        # Log in
+        self.home_page.go_to_login_page()
+        self.login_page.login_to_account(login, password)
+
+        # Enter a valid email address and click on the Subscribe button.
+        self.home_page.subscribe_newsletter(email)
+
+        # Verify that the Notifications and Newsletter page is displayed
+        actual_notification_page_header = self.my_account_page.get_notification_tab_header().text
+        self.assertIn(expected_notification_page_header, actual_notification_page_header)
+
+        # Verify that the Newsletters checkbox is checked.
+        self.assertTrue(self.my_account_page.is_newsletter_checkbox_selected())
+        # Click on the Continue button.
+        self.my_account_page.click_continue()
+        # Verify that a success message appears confirming the subscription.
+        actual_success_message = self.my_account_page.get_success_notification_message().text
+        self.assertIn(expected_success_message, actual_success_message)
+

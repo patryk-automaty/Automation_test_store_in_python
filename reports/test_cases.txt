@@ -112,19 +112,11 @@ Objective: Ensure that users can subscribe to the newsletter.
 
 Steps:
 
+Login to a registered account.
 Scroll down to the Newsletter Subscription section.
 Enter a valid email address.
 Click on the Subscribe button.
+Verify that the Notifications and Newsletter page is displayed.
+Verify that the Newsletters checkbox is checked.
+Click on the Continue button.
 Verify that a success message appears confirming the subscription.
-Try subscribing with the same email again.
-Verify that a "You are already subscribed" message appears.
-
-10. Verify Contact Us Form Submission
-Objective: Ensure that users can submit the contact form successfully.
-
-Steps:
-
-Navigate to the "Contact Us" page.
-Fill in the required fields (Name, Email, Enquiry).
-Click on Submit.
-Verify that a success message appears confirming submission.

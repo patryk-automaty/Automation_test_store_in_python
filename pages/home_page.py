@@ -21,6 +21,8 @@ class HomePage(BasePage):
     _search_perform = (By.XPATH, "//div[@title='Go']")
     _account_menu = (By.ID, "customer_menu_top")
     _dropdown_item_from_account_menu = (By.CSS_SELECTOR, "//li[@class='dropdown']/a")
+    _subscribe_nl_input = (By.ID, "appendedInputButton")
+    _subscribe_button = (By.XPATH, "//button[text()='Subscribe']")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -73,3 +75,7 @@ class HomePage(BasePage):
 
     def go_to_account_page(self):
         self.click(self._account_navbar)
+
+    def subscribe_newsletter(self, email):
+        self.send_keys(*self._subscribe_nl_input, email)
+        self.click(self._subscribe_button)
