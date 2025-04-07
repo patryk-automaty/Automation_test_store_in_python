@@ -2,7 +2,9 @@ import random
 
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class HomePage(BasePage):
     # Locators to the home page
@@ -17,6 +19,10 @@ class HomePage(BasePage):
     _go_to_home_page = (By.XPATH, "//img[@title='Automation Test Store']")
     _search_bar = (By.ID, "filter_keyword")
     _search_perform = (By.XPATH, "//div[@title='Go']")
+    _account_menu = (By.ID, "customer_menu_top")
+    _dropdown_item_from_account_menu = (By.CSS_SELECTOR, "//li[@class='dropdown']/a")
+    _subscribe_nl_input = (By.ID, "appendedInputButton")
+    _subscribe_button = (By.XPATH, "//button[text()='Subscribe']")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -50,3 +56,26 @@ class HomePage(BasePage):
         self.send_keys(*self._search_bar, search_input)
         self.click(self._search_perform)
 
+    # to fix
+    def choose_dropdown_option_from_account_menu(self, option_text):
+
+        account_menu_element = self.find_element(*self._account_menu)
+        dropdown_items = self._dropdown_item_from_account_menu
+
+        ActionChains(self.driver).move_to_element(account_menu_element).perform()
+        WebDriverWait(self.driver, 5).until(
+            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".sub_menu.dropdown-menu li a"))
+        )
+
+        for item in dropdown_items:
+            item_text = item.strip()
+            if option_text.lower() in item_text.lower():
+                item.click()
+                return
+
+    def go_to_account_page(self):
+        self.click(self._account_navbar)
+
+    def subscribe_newsletter(self, email):
+        self.send_keys(*self._subscribe_nl_input, email)
+        self.click(self._subscribe_button)
