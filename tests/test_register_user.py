@@ -1,6 +1,8 @@
 
 import unittest
 
+import allure
+
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.my_account_page import MyAccountPage
@@ -33,6 +35,8 @@ class RegisterTest(unittest.TestCase):
         cls.driver.quit() # close the browser session
 
     # tc 1
+    @allure.title("Verify User Registration with Valid Data")
+    @allure.description("Ensure a user can successfully register with valid details.")
     def test_register_user_with_valid_data(self):
 
         # Initialize helper tool for test data generation

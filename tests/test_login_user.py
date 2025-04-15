@@ -1,5 +1,7 @@
 import unittest
 
+import allure
+
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from utils.config import Config
@@ -23,10 +25,9 @@ class LoginTest(unittest.TestCase):
     def tearDownClass(cls):
         cls.driver.quit()  # close the browser session
 
-
+    @allure.title("Verify Login with Invalid Credentials")
+    @allure.description("Ensure an error message appears when logging in with incorrect credentials.")
     def test_login_with_invalid_credentials(self):
-
-
         wrong_login = "invalid_email1111@example.com"
         wrong_password = "WrongPassword123"
         second_wrong_password = "WrongPassword321"

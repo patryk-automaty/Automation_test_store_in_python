@@ -1,5 +1,7 @@
 import unittest
 
+import allure
+
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.register_user_page import RegisterUserPage
@@ -36,6 +38,8 @@ class RegisterTest(unittest.TestCase):
         cls.driver.quit()
 
     # tc 8
+    @allure.title("Verify Wishlist Functionality")
+    @allure.description("Ensure that users can add products to their wishlist.")
     def test_wishlist_func(self):
 
 
@@ -76,7 +80,8 @@ class RegisterTest(unittest.TestCase):
         )
 
     # tc 9
-
+    @allure.title("Verify Newsletter Subscription")
+    @allure.description("Ensure that users can subscribe to the newsletter.")
     def test_newsletter_sub(self):
 
         # Get test user data

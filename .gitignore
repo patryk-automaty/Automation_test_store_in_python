@@ -9,3 +9,5 @@
 /model/user_data.json
 __pycache__/
 *.pyc
+/reports/*
+!reports/.gitkeep

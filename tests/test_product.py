@@ -1,6 +1,8 @@
 import time
 import unittest
 
+import allure
+
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.my_account_page import MyAccountPage
@@ -41,6 +43,8 @@ class RegisterTest(unittest.TestCase):
         cls.driver.quit() # close the browser session
 
     # tc 3
+    @allure.title("Add a Product to the Shopping Cart and Verify")
+    @allure.description("Ensure that a selected product is successfully added to the shopping cart.")
     def test_add_product_to_shopping_cart(self):
 
         # define data
@@ -80,6 +84,8 @@ class RegisterTest(unittest.TestCase):
         self.assertEqual(product_price_from_details[0][1], total_product_price, "Total price does not match!")
 
     # tc 4
+    @allure.title("Remove a Product from the Shopping Cart")
+    @allure.description("Ensure a user can remove an item from the shopping cart.")
     def test_remove_product_from_shop_cart(self):
 
         actual_empty_shop_cart_message = 'Your shopping cart is empty!'
@@ -95,6 +101,8 @@ class RegisterTest(unittest.TestCase):
         self.assertIn(actual_empty_shop_cart_message, expected_empty_shop_cart_message)
 
     # tc 5
+    @allure.title("Verify Checkout Process with a Registered User")
+    @allure.description("Ensure that a registered user can complete the checkout process.")
     def test_verify_checkout_with_registered_account(self):
 
         login = "daniel898"
@@ -117,6 +125,8 @@ class RegisterTest(unittest.TestCase):
         self.assertIn("Your Order Has Been Processed!", self.success_order_page.get_success_order_message())
 
     # tc 6
+    @allure.title("Verify Product Search Functionality")
+    @allure.description("Ensure that users can search for products using the search bar.")
     def test_verify_product_search_func(self):
 
         # Locate the search bar and Enter a product name (e.g., "Shampoo").
@@ -133,6 +143,8 @@ class RegisterTest(unittest.TestCase):
         self.assertIn(search_text.lower(), product_name.lower())
 
     # tc 7
+    @allure.title("Verify Sorting Products by Price")
+    @allure.description("Ensure that users can sort products by price from low to high.")
     def test_sorting_product_by_price(self):
 
         # Navigate to a category page (e.g., Skincare).
