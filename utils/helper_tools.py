@@ -3,6 +3,11 @@ import os
 import random
 import string
 from faker import Faker
+import allure
+import uuid
+
+
+
 
 class HelperTools:
 
@@ -85,3 +90,12 @@ class HelperTools:
         self.save_test_data_to_json(self.register_user_data_generator())
         return self.get_last_saved_data()
 
+    def take_screenshot(self, driver, name="screenshot"):
+        unique_uuid = str(uuid.uuid4())[:8]
+        full_name = f"{name}_{unique_uuid}"
+        screenshot = driver.get_screenshot_as_png()
+        allure.attach(
+            screenshot,
+            name=full_name,
+            attachment_type=allure.attachment_type.PNG
+        )
