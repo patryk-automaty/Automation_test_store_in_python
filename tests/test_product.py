@@ -1,45 +1,60 @@
-import unittest
+import pytest
 import allure
+from selenium.webdriver.remote.webdriver import WebDriver
+
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
-from pages.my_account_page import MyAccountPage
-from pages.register_user_page import RegisterUserPage
-from pages.register_success_page import RegisterSuccessPage
-from pages.logout_page import LogoutPage
 from pages.product_page import ProductPage
-from utils.config import Config
-from utils.driver_factory import get_driver
 from pages.checkout_confirmation_page import CheckoutPage
 from pages.success_order_page import SuccessOrderPage
 from pages.search_page import SearchPage
 from pages.product_details_page import ProductDetailsPage
+from utils.config import Config
+from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
 
-class RegisterTest(unittest.TestCase):
+@pytest.fixture(scope="class")
+def setup_class_fixture(request):
+    browser = Config.get_browser()
+    driver = get_driver(browser)
+    driver.get(Config.get_base_url())
 
-    @classmethod
-    def setUpClass(cls):
-        browser = Config.get_browser() # Get browser type from configuration
-        cls.driver = get_driver(browser) # Initialize WebDriver
-        cls.driver.get(Config.get_base_url()) # Open the base url from config
 
-        # Initialize page objects
-        cls.home_page = HomePage(cls.driver)
-        cls.register_page = RegisterUserPage(cls.driver)
-        cls.login_page = LoginPage(cls.driver)
-        cls.register_success_page = RegisterSuccessPage(cls.driver)
-        cls.logout_page = LogoutPage(cls.driver)
-        cls.my_account_page = MyAccountPage(cls.driver)
-        cls.product_page = ProductPage(cls.driver)
-        cls.checkout_page = CheckoutPage(cls.driver)
-        cls.success_order_page = SuccessOrderPage(cls.driver)
-        cls.search_page = SearchPage(cls.driver)
-        cls.product_details_page = ProductDetailsPage(cls.driver)
-        cls.helper_tools = HelperTools()
+    home_page = HomePage(driver)
+    login_page = LoginPage(driver)
+    product_page = ProductPage(driver)
+    checkout_page = CheckoutPage(driver)
+    success_order_page = SuccessOrderPage(driver)
+    search_page = SearchPage(driver)
+    product_details_page = ProductDetailsPage(driver)
+    helper_tools = HelperTools()
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit() # close the browser session
+    request.cls.driver = driver
+    request.cls.home_page = home_page
+    request.cls.login_page = login_page
+    request.cls.product_page = product_page
+    request.cls.checkout_page = checkout_page
+    request.cls.success_order_page = success_order_page
+    request.cls.search_page = search_page
+    request.cls.product_details_page = product_details_page
+    request.cls.helper_tools = helper_tools
+
+    yield
+    driver.quit()
+
+@allure.suite("Register Suite")
+@pytest.mark.usefixtures("setup_class_fixture")
+class TestRegister:
+
+    driver: WebDriver
+    home_page: HomePage
+    login_page: LoginPage
+    product_page: ProductPage
+    checkout_page: CheckoutPage
+    success_order_page: SuccessOrderPage
+    search_page: SearchPage
+    product_details_page: ProductDetailsPage
+    helper_tools: HelperTools
 
     # tc 3
     @allure.title("Add a Product to the Shopping Cart and Verify")
@@ -76,7 +91,7 @@ class RegisterTest(unittest.TestCase):
         with allure.step("Verify that shopping cart is open"):
             expected_shopping_cart_header_text = "SHOPPING CART"
             actual_shopping_cart_header_text = self.product_page.get_shopping_cart_header()
-            self.assertIn(expected_shopping_cart_header_text, actual_shopping_cart_header_text)
+            assert expected_shopping_cart_header_text in actual_shopping_cart_header_text
             self.helper_tools.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify that the correct product name, price, and quantity are displayed"):
@@ -85,10 +100,10 @@ class RegisterTest(unittest.TestCase):
             product_price_from_details = self.product_page.get_product_prices()
             product_quantity_from_details = self.product_page.get_quantities_from_details()
 
-            self.assertEqual(product_name_from_details[0], product_name, "Product name does not match!")
-            self.assertEqual(product_quantity_from_details[0], product_quantity, "Product quantity does not match!")
-            self.assertEqual(product_price_from_details[0][0], unit_product_price_for_assertion, "Unit price does not match!")
-            self.assertEqual(product_price_from_details[0][1], total_product_price, "Total price does not match!")
+            assert product_name_from_details[0] == product_name
+            assert product_quantity_from_details[0] == product_quantity
+            assert product_price_from_details[0][0] == unit_product_price_for_assertion
+            assert product_price_from_details[0][1] == total_product_price
 
     # tc 4
     @allure.title("Remove a Product from the Shopping Cart")
@@ -111,7 +126,7 @@ class RegisterTest(unittest.TestCase):
 
         with allure.step("Verify the shopping cart is empty"):
             expected_empty_shop_cart_message = self.product_page.empty_cart_message()
-            self.assertIn(actual_empty_shop_cart_message, expected_empty_shop_cart_message)
+            assert actual_empty_shop_cart_message in expected_empty_shop_cart_message
             self.helper_tools.take_screenshot(self.driver, test_name)
 
     # tc 5
@@ -137,15 +152,15 @@ class RegisterTest(unittest.TestCase):
             self.helper_tools.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify pre-filled billing and shipping addresses"):
-            self.assertTrue(self.checkout_page.shipping_address().is_displayed())
-            self.assertTrue(self.checkout_page.payment_address().is_displayed())
+            assert self.checkout_page.shipping_address().is_displayed()
+            assert self.checkout_page.payment_address().is_displayed()
 
         with allure.step("Click confirm to place the order"):
             self.checkout_page.click_confirm()
             self.helper_tools.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify order confirmation message is displayed"):
-            self.assertIn("Your Order Has Been Processed!", self.success_order_page.get_success_order_message())
+            assert "Your Order Has Been Processed!" in self.success_order_page.get_success_order_message()
 
     # tc 6
     @allure.title("Verify Product Search Functionality")
@@ -161,7 +176,7 @@ class RegisterTest(unittest.TestCase):
 
         with allure.step("Verify that search results are displayed"):
             displayed_products = [p for p in self.search_page.searched_product_names() if p.is_displayed()]
-            self.assertTrue(len(displayed_products) > 0)
+            assert len(displayed_products) > 0
 
         with allure.step("Click the first visible product"):
             products = self.search_page.searched_product_names()
@@ -170,7 +185,7 @@ class RegisterTest(unittest.TestCase):
 
         with allure.step("Verify product name contains search text"):
             product_name = self.product_details_page.get_product_name()
-            self.assertIn(search_text.lower(), product_name.lower())
+            assert search_text.lower() in product_name.lower()
 
     # tc 7
     @allure.title("Verify Sorting Products by Price")
@@ -190,12 +205,12 @@ class RegisterTest(unittest.TestCase):
             self.helper_tools.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify that products are sorted in ascending order"):
-            self.assertTrue(self.product_page.are_products_sorted_asc_by_price())
+            assert self.product_page.are_products_sorted_asc_by_price()
 
         with allure.step("Sort products by Price: High to Low"):
             self.product_page.sort_by_price_desc()
             self.helper_tools.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify that products are sorted in descending order"):
-            self.assertTrue(self.product_page.are_products_sorted_desc_by_price())
+            assert self.product_page.are_products_sorted_desc_by_price()
 
