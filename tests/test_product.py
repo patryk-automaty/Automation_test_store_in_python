@@ -44,7 +44,7 @@ def setup_class_fixture(request):
 
 @allure.suite("Register Suite")
 @pytest.mark.usefixtures("setup_class_fixture")
-class TestRegister:
+class TestProduct:
 
     driver: WebDriver
     home_page: HomePage

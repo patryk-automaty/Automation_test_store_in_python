@@ -1,43 +1,46 @@
-import unittest
-
+import pytest
 import allure
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
-from pages.register_user_page import RegisterUserPage
-from pages.logout_page import LogoutPage
-from pages.product_page import ProductPage
-from pages.wishlist_page import WishlistPage
 from pages.my_account_page import MyAccountPage
 from utils.config import Config
 from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
 
 
-class RegisterTest(unittest.TestCase):
+@pytest.fixture(scope="class")
+def setup_class_fixture(request):
+    browser = Config.get_browser()
+    driver = get_driver(browser)
+    driver.get(Config.get_base_url())
 
-    @classmethod
-    def setUpClass(cls):
-        # Setup WebDriver
-        browser = Config.get_browser()
-        cls.driver = get_driver(browser)
-        cls.driver.get(Config.get_base_url())
+    home_page = HomePage(driver)
+    login_page = LoginPage(driver)
+    my_account_page = MyAccountPage(driver)
+    helper_tool = HelperTools()
 
-        # Initialize only needed page objects
-        cls.home_page = HomePage(cls.driver)
-        cls.register_page = RegisterUserPage(cls.driver)
-        cls.login_page = LoginPage(cls.driver)
-        cls.logout_page = LogoutPage(cls.driver)
-        cls.my_account_page = MyAccountPage(cls.driver)
-        cls.product_page = ProductPage(cls.driver)
-        cls.wishlist_page = WishlistPage(cls.driver)
-        cls.helper_tool = HelperTools()
+    request.cls.driver = driver
+    request.cls.home_page = home_page
+    request.cls.login_page = login_page
+    request.cls.my_account_page = my_account_page
+    request.cls.helper_tool = helper_tool
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit()
+    yield
+    driver.quit()
 
-    # tc 8
+
+@allure.suite("Newsletter Suite")
+@pytest.mark.usefixtures("setup_class_fixture")
+class TestNewsletter:
+
+    driver: WebDriver
+    home_page: HomePage
+    login_page: LoginPage
+    my_account_page: MyAccountPage
+    helper_tool: HelperTools
+
     @allure.title("Verify Newsletter Subscription")
     @allure.description("Ensure that users can subscribe to the newsletter.")
     def test_newsletter_sub(self):
@@ -47,8 +50,8 @@ class RegisterTest(unittest.TestCase):
         password = user_data["password"]
         email = user_data["email"]
 
-        expected_notification_page_header = "NOTIFICATIONS AND NEWSLETTER"
-        expected_success_message = "Success: Your notification settings has been successfully updated!"
+        expected_header = "NOTIFICATIONS AND NEWSLETTER"
+        expected_success = "Success: Your notification settings has been successfully updated!"
 
         with allure.step("Log in with registered credentials"):
             self.home_page.go_to_login_page()
@@ -59,14 +62,14 @@ class RegisterTest(unittest.TestCase):
             self.home_page.subscribe_newsletter(email)
             self.helper_tool.take_screenshot(self.driver, test_name)
 
-        with allure.step("Verify Notifications and Newsletter page is displayed"):
-            actual_notification_page_header = self.my_account_page.get_notification_tab_header().text
-            self.assertIn(expected_notification_page_header, actual_notification_page_header)
+        with allure.step("Verify that the Notifications and Newsletter page is displayed"):
+            actual_header = self.my_account_page.get_notification_tab_header().text
+            assert expected_header in actual_header
 
         with allure.step("Verify that the newsletter checkbox is selected"):
-            self.assertTrue(self.my_account_page.is_newsletter_checkbox_selected())
+            assert self.my_account_page.is_newsletter_checkbox_selected()
 
-        with allure.step("Click Continue and check success message"):
+        with allure.step("Click Continue and verify success message"):
             self.my_account_page.click_continue()
-            actual_success_message = self.my_account_page.get_success_notification_message().text
-            self.assertIn(expected_success_message, actual_success_message)
+            actual_success = self.my_account_page.get_success_notification_message().text
+            assert expected_success in actual_success

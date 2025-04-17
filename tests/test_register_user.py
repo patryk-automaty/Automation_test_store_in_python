@@ -1,7 +1,7 @@
 
-import unittest
-
 import allure
+import pytest
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
@@ -13,28 +13,45 @@ from utils.config import Config
 from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
 
+@pytest.fixture(scope="class")
+def setup_class_fixture(request):
+    browser = Config.get_browser()
+    driver = get_driver(browser)
+    driver.get(Config.get_base_url())
 
-class RegisterTest(unittest.TestCase):
+    # Page objects and helper tools
+    home_page = HomePage(driver)
+    register_page = RegisterUserPage(driver)
+    login_page = LoginPage(driver)
+    register_success_page = RegisterSuccessPage(driver)
+    logout_page = LogoutPage(driver)
+    my_account_page = MyAccountPage(driver)
+    helper_tool = HelperTools()
 
-    @classmethod
-    def setUpClass(cls):
-        browser = Config.get_browser() # Get browser type from configuration
-        cls.driver = get_driver(browser) # Initialize WebDriver
-        cls.driver.get(Config.get_base_url()) # Open the base url from config
+    request.cls.driver = driver
+    request.cls.home_page = home_page
+    request.cls.register_page = register_page
+    request.cls.login_page = login_page
+    request.cls.register_success_page = register_success_page
+    request.cls.logout_page = logout_page
+    request.cls.my_account_page = my_account_page
+    request.cls.helper_tool = helper_tool
 
-        # Initialize page objects
-        cls.home_page = HomePage(cls.driver)
-        cls.register_page = RegisterUserPage(cls.driver)
-        cls.login_page = LoginPage(cls.driver)
-        cls.register_success_page = RegisterSuccessPage(cls.driver)
-        cls.logout_page = LogoutPage(cls.driver)
-        cls.my_account_page = MyAccountPage(cls.driver)
-        cls.helper_tool = HelperTools()
+    yield
 
+    driver.quit()
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit() # close the browser session
+@allure.suite("Register Suite")
+@pytest.mark.usefixtures("setup_class_fixture")
+class RegisterTest:
+    helper_tool: HelperTools
+    home_page: HomePage
+    login_page: LoginPage
+    driver: WebDriver
+    register_page: RegisterUserPage
+    register_success_page: RegisterSuccessPage
+    my_account_page: MyAccountPage
+    logout_page: LogoutPage
 
     # tc 1
     @allure.title("Verify User Registration with Valid Data")
@@ -49,13 +66,18 @@ class RegisterTest(unittest.TestCase):
         self.helper_tool.save_test_data_to_json(generated_data)
         user_data = self.helper_tool.get_last_saved_data()
 
-        # Set address details for the test"
+        # Set address details for the test
         address1 = "Krucza 1/2"
         address2 = "apartament 5"
         city = "Warsaw"
         region = "Mazowieckie"
         zipcode = "01-100"
         country = "Poland"
+
+        # test data
+        expected_success_register_text = "YOUR ACCOUNT HAS BEEN CREATED!"
+        expected_logout_header_text = 'ACCOUNT LOGOUT'
+        expected_my_account_header_text = 'MY ACCOUNT'
 
         with allure.step("Navigate to login page and start registration"):
             self.home_page.go_to_login_page()
@@ -104,9 +126,8 @@ class RegisterTest(unittest.TestCase):
             self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify success registration message"):
-            expected_success_register_text = "YOUR ACCOUNT HAS BEEN CREATED!"
             actual_success_register_text = self.register_success_page.get_register_success_header_text()
-            self.assertIn(expected_success_register_text, actual_success_register_text)
+            assert expected_success_register_text in actual_success_register_text
 
         with allure.step("Proceed to My Account page"):
             self.register_success_page.click_continue_button()
@@ -117,12 +138,13 @@ class RegisterTest(unittest.TestCase):
             self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify logout success message"):
-            expected_logout_header_text = 'ACCOUNT LOGOUT'
+
             actual_logout_header_text = self.logout_page.get_account_logout_header_text()
-            self.assertIn(expected_logout_header_text, actual_logout_header_text)
+            assert expected_logout_header_text in actual_logout_header_text
 
         with allure.step("Click continue after logout"):
             self.logout_page.click_continue()
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Login with the newly registered user"):
             self.home_page.go_to_login_page()
@@ -130,6 +152,5 @@ class RegisterTest(unittest.TestCase):
             self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify successful login to My Account page"):
-            expected_my_account_header_text = 'MY ACCOUNT'
             actual_my_account_header_text = self.my_account_page.get_my_account_header_text()
-            self.assertIn(expected_my_account_header_text, actual_my_account_header_text)
+            assert expected_my_account_header_text in actual_my_account_header_text
