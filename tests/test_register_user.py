@@ -13,7 +13,7 @@ from utils.config import Config
 from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="function")
 def setup_class_fixture(request):
     browser = Config.get_browser()
     driver = get_driver(browser)

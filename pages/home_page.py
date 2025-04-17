@@ -15,7 +15,7 @@ class HomePage(BasePage):
     _checkout_navbar = (By.XPATH, "//div[@id='topnav']//li[@data-id='menu_checkout']")
     _logout_navbar = (By.XPATH, "//ul[@id='main_menu']//span[(@class='menu_text') and (text()='Logout')]")
     _subnav_list = (By.XPATH, "//ul[@class='nav-pills categorymenu']/li/a")
-    _add_product = (By.XPATH, "//i[@class='fa fa-cart-plus fa-fw']")
+    _add_product = (By.XPATH, "//a[@title='Add to Cart']")
     _go_to_home_page = (By.XPATH, "//img[@title='Automation Test Store']")
     _search_bar = (By.ID, "filter_keyword")
     _search_perform = (By.XPATH, "//div[@title='Go']")
@@ -44,7 +44,8 @@ class HomePage(BasePage):
     def add_random_product(self):
         products = self.find_elements(*self._add_product)
         random_product = random.choice(products)
-        random_product.click()
+        self.driver.execute_script("arguments[0].scrollIntoView();", random_product)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(random_product)).click()
 
     def go_to_shopping_cart(self):
         self.click(self._cart_navbar)

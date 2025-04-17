@@ -19,7 +19,7 @@ class ProductPage(BasePage):
     _product_name_from_details = (By.XPATH, "//tr/td[@class='align_left']/a")
     _quantity_from_details = (By.XPATH, "//td/div[@class='input-group input-group-sm']/input")
     _price_from_details = (By.XPATH, "//td[@class='align_right']")
-    _remove_button = (By.XPATH, "//i[@class='fa fa-trash-o fa-fw']")
+    _remove_button = (By.XPATH, "//a[@class='btn btn-sm btn-default']")
     _empty_cart_message = (By.XPATH, "//div[contains(text(), 'Your shopping cart is empty')]")
     _checkout_button_1 = (By.ID, "cart_checkout1")
     _add_to_wishlist_button = (By.XPATH, "//a[@class='wishlist_add btn btn-large']")

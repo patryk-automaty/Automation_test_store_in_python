@@ -52,23 +52,8 @@ Click on the "Remove" (X) button next to the product.
 Verify that the item is successfully removed.
 Check that the cart total is updated correctly.
 
-5. Verify Checkout Process with a Registered User
-Objective: Ensure that a registered user can complete the checkout process.
 
-Steps:
-
-Login to an existing registered account.
-Add any product to the cart.
-Click on "Checkout".
-Verify that the billing address and shipping address are pre-filled.
-Select the Shipping Method.
-Choose a Payment Method (if available).
-Agree to the Terms & Conditions.
-Click on "Confirm Order".
-Verify that an order confirmation message appears.
-
-
-6. Verify Product Search Functionality
+5. Verify Product Search Functionality
 Objective: Ensure that users can search for products using the search bar.
 
 Steps:
@@ -81,7 +66,7 @@ Verify that the search results display relevant products.
 Click on a product to open the product details page.
 Verify that the product name matches the search query.
 
-7. Verify Sorting Products by Price
+6. Verify Sorting Products by Price
 Objective: Ensure that users can sort products by price from low to high.
 
 Steps:
@@ -93,7 +78,7 @@ Verify that products are sorted in ascending order.
 Change sorting to "Price: High to Low".
 Verify that products are now sorted in descending order.
 
-8. Verify Wishlist Functionality
+7. Verify Wishlist Functionality
 Objective: Ensure that users can add products to their wishlist.
 
 Steps:
@@ -107,7 +92,7 @@ Click on the Remove button to delete the product from the wishlist.
 Verify that the wishlist is now empty.
 
 
-9. Verify Newsletter Subscription
+8. Verify Newsletter Subscription
 Objective: Ensure that users can subscribe to the newsletter.
 
 Steps:

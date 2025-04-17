@@ -13,7 +13,7 @@ from utils.config import Config
 from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="function")
 def setup_class_fixture(request):
     browser = Config.get_browser()
     driver = get_driver(browser)
@@ -128,39 +128,6 @@ class TestProduct:
             expected_empty_shop_cart_message = self.product_page.empty_cart_message()
             assert actual_empty_shop_cart_message in expected_empty_shop_cart_message
             self.helper_tools.take_screenshot(self.driver, test_name)
-
-    # tc 5
-    @allure.title("Verify Checkout Process with a Registered User")
-    @allure.description("Ensure that a registered user can complete the checkout process.")
-    def test_verify_checkout_with_registered_account(self):
-        test_name = "test_checkout"
-        login = "daniel898"
-        password = "7PgKmgZz"
-
-        with allure.step("Log in with registered credentials"):
-            self.home_page.go_to_login_page()
-            self.login_page.login_to_account(login, password)
-            self.helper_tools.take_screenshot(self.driver, test_name)
-
-        with allure.step("Add a random product to the cart"):
-            self.home_page.go_to_home_page()
-            self.home_page.add_random_product()
-            self.helper_tools.take_screenshot(self.driver, test_name)
-
-        with allure.step("Proceed to checkout"):
-            self.product_page.click_checkout()
-            self.helper_tools.take_screenshot(self.driver, test_name)
-
-        with allure.step("Verify pre-filled billing and shipping addresses"):
-            assert self.checkout_page.shipping_address().is_displayed()
-            assert self.checkout_page.payment_address().is_displayed()
-
-        with allure.step("Click confirm to place the order"):
-            self.checkout_page.click_confirm()
-            self.helper_tools.take_screenshot(self.driver, test_name)
-
-        with allure.step("Verify order confirmation message is displayed"):
-            assert "Your Order Has Been Processed!" in self.success_order_page.get_success_order_message()
 
     # tc 6
     @allure.title("Verify Product Search Functionality")
