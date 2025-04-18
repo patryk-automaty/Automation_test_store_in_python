@@ -1,13 +1,18 @@
 name: Run Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
+    name: Run tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -21,11 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install allure-pytest
 
-      - name: Run tests with pytest
-        run: pytest tests/ --alluredir=allure-results
+      - name: Run Pytest and generate Allure results
+        run: pytest tests/ --alluredir=tests/reports/allure-results
 
-      - name: Upload Allure Results
+      - name: Upload Allure Results as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: allure-results
-          path: allure-results
+          path: tests/reports/allure-results
