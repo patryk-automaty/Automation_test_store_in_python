@@ -1,114 +1,78 @@
-import unittest
-
+import pytest
 import allure
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
-from pages.register_user_page import RegisterUserPage
-from pages.logout_page import LogoutPage
-from pages.product_page import ProductPage
-from pages.wishlist_page import WishlistPage
 from pages.my_account_page import MyAccountPage
 from utils.config import Config
 from utils.driver_factory import get_driver
 from utils.helper_tools import HelperTools
 
 
-class RegisterTest(unittest.TestCase):
+@pytest.fixture(scope="function")
+def setup_class_fixture(request):
+    browser = Config.get_browser()
+    driver = get_driver(browser)
+    driver.get(Config.get_base_url())
 
-    @classmethod
-    def setUpClass(cls):
-        # Setup WebDriver
-        browser = Config.get_browser()
-        cls.driver = get_driver(browser)
-        cls.driver.get(Config.get_base_url())
+    home_page = HomePage(driver)
+    login_page = LoginPage(driver)
+    my_account_page = MyAccountPage(driver)
+    helper_tool = HelperTools()
 
-        # Initialize only needed page objects
-        cls.home_page = HomePage(cls.driver)
-        cls.register_page = RegisterUserPage(cls.driver)
-        cls.login_page = LoginPage(cls.driver)
-        cls.logout_page = LogoutPage(cls.driver)
-        cls.my_account_page = MyAccountPage(cls.driver)
-        cls.product_page = ProductPage(cls.driver)
-        cls.wishlist_page = WishlistPage(cls.driver)
-        cls.helper_tool = HelperTools()
+    request.cls.driver = driver
+    request.cls.home_page = home_page
+    request.cls.login_page = login_page
+    request.cls.my_account_page = my_account_page
+    request.cls.helper_tool = helper_tool
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit()
-
-    # tc 8
-    @allure.title("Verify Wishlist Functionality")
-    @allure.description("Ensure that users can add products to their wishlist.")
-    def test_wishlist_func(self):
+    yield
+    driver.quit()
 
 
-        # Get test user data
-        user_data = self.helper_tool.get_last_saved_data()
-        login = user_data["login_name"]
-        password = user_data["password"]
+@allure.suite("Newsletter Suite")
+@pytest.mark.usefixtures("setup_class_fixture")
+class TestNewsletter:
 
-        # Test data
-        category = "SKINCARE"
-        product_name = "Total Moisture Facial Cream"
+    driver: WebDriver
+    home_page: HomePage
+    login_page: LoginPage
+    my_account_page: MyAccountPage
+    helper_tool: HelperTools
 
-        # Log in
-        self.home_page.go_to_login_page()
-        self.login_page.login_to_account(login, password)
-
-        # Go to product and add to wishlist
-        self.home_page.choose_category_from_subnav(category)
-        self.product_page.open_product_details(product_name)
-        self.product_page.add_product_to_wishlist()
-
-        # Go to wishlist
-        self.home_page.go_to_account_page()
-        self.my_account_page.wishlist_from_my_account_box()
-
-        # Assert product is in wishlist
-
-        self.assertTrue(
-            self.wishlist_page.get_product_name().is_displayed(),
-            "Expected product to be visible in the wishlist"
-        )
-
-        # Remove product and assert it's gone
-        self.wishlist_page.remove_product()
-        self.assertFalse(
-            self.wishlist_page.get_product_name().is_displayed(),
-            "Expected wishlist to be empty after removing the product"
-        )
-
-    # tc 9
     @allure.title("Verify Newsletter Subscription")
     @allure.description("Ensure that users can subscribe to the newsletter.")
     def test_newsletter_sub(self):
-
-        # Get test user data
+        test_name = "test_newsletter_sub"
         user_data = self.helper_tool.get_last_saved_data()
         login = user_data["login_name"]
         password = user_data["password"]
         email = user_data["email"]
 
-        # Expected results to assertion
-        expected_notification_page_header = "NOTIFICATIONS AND NEWSLETTER"
-        expected_success_message = "Success: Your notification settings has been successfully updated!"
-        # Log in
-        self.home_page.go_to_login_page()
-        self.login_page.login_to_account(login, password)
+        expected_header = "NOTIFICATIONS AND NEWSLETTER"
+        expected_success = "Success: Your notification settings has been successfully updated!"
 
-        # Enter a valid email address and click on the Subscribe button.
-        self.home_page.subscribe_newsletter(email)
+        with allure.step("Log in with registered credentials"):
+            self.home_page.go_to_login_page()
+            self.login_page.login_to_account(login, password)
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
-        # Verify that the Notifications and Newsletter page is displayed
-        actual_notification_page_header = self.my_account_page.get_notification_tab_header().text
-        self.assertIn(expected_notification_page_header, actual_notification_page_header)
+        with allure.step("Enter email and subscribe to newsletter"):
+            self.home_page.subscribe_newsletter(email)
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
-        # Verify that the Newsletters checkbox is checked.
-        self.assertTrue(self.my_account_page.is_newsletter_checkbox_selected())
-        # Click on the Continue button.
-        self.my_account_page.click_continue()
-        # Verify that a success message appears confirming the subscription.
-        actual_success_message = self.my_account_page.get_success_notification_message().text
-        self.assertIn(expected_success_message, actual_success_message)
+        with allure.step("Verify that the Notifications and Newsletter page is displayed"):
+            actual_header = self.my_account_page.get_notification_tab_header().text
+            assert expected_header in actual_header
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
+        with allure.step("Verify that the newsletter checkbox is selected"):
+            assert self.my_account_page.is_newsletter_checkbox_selected()
+            self.helper_tool.take_screenshot(self.driver, test_name)
+
+        with allure.step("Click Continue and verify success message"):
+            self.my_account_page.click_continue()
+            actual_success = self.my_account_page.get_success_notification_message().text
+            assert expected_success in actual_success
+            self.helper_tool.take_screenshot(self.driver, test_name)
