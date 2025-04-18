@@ -75,7 +75,7 @@ class RegisterTest:
         country = "Poland"
 
         # test data
-        expected_success_register_text = "YOUR ACCOUNT HAS BEEN CREATED!"
+        expected_success_register_text = "YOUR ACCOUNT HAS BEEN CREATED!1"
         expected_logout_header_text = 'ACCOUNT LOGOUT'
         expected_my_account_header_text = 'MY ACCOUNT'
 
