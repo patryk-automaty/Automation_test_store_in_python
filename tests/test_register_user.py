@@ -128,6 +128,7 @@ class RegisterTest:
         with allure.step("Verify success registration message"):
             actual_success_register_text = self.register_success_page.get_register_success_header_text()
             assert expected_success_register_text in actual_success_register_text
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Proceed to My Account page"):
             self.register_success_page.click_continue_button()
@@ -138,9 +139,9 @@ class RegisterTest:
             self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify logout success message"):
-
             actual_logout_header_text = self.logout_page.get_account_logout_header_text()
             assert expected_logout_header_text in actual_logout_header_text
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Click continue after logout"):
             self.logout_page.click_continue()
@@ -154,3 +155,4 @@ class RegisterTest:
         with allure.step("Verify successful login to My Account page"):
             actual_my_account_header_text = self.my_account_page.get_my_account_header_text()
             assert expected_my_account_header_text in actual_my_account_header_text
+            self.helper_tool.take_screenshot(self.driver, test_name)

@@ -65,11 +65,14 @@ class TestNewsletter:
         with allure.step("Verify that the Notifications and Newsletter page is displayed"):
             actual_header = self.my_account_page.get_notification_tab_header().text
             assert expected_header in actual_header
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Verify that the newsletter checkbox is selected"):
             assert self.my_account_page.is_newsletter_checkbox_selected()
+            self.helper_tool.take_screenshot(self.driver, test_name)
 
         with allure.step("Click Continue and verify success message"):
             self.my_account_page.click_continue()
             actual_success = self.my_account_page.get_success_notification_message().text
             assert expected_success in actual_success
+            self.helper_tool.take_screenshot(self.driver, test_name)

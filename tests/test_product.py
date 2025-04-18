@@ -19,26 +19,15 @@ def setup_class_fixture(request):
     driver = get_driver(browser)
     driver.get(Config.get_base_url())
 
-
-    home_page = HomePage(driver)
-    login_page = LoginPage(driver)
-    product_page = ProductPage(driver)
-    checkout_page = CheckoutPage(driver)
-    success_order_page = SuccessOrderPage(driver)
-    search_page = SearchPage(driver)
-    product_details_page = ProductDetailsPage(driver)
-    helper_tools = HelperTools()
-
     request.cls.driver = driver
-    request.cls.home_page = home_page
-    request.cls.login_page = login_page
-    request.cls.product_page = product_page
-    request.cls.checkout_page = checkout_page
-    request.cls.success_order_page = success_order_page
-    request.cls.search_page = search_page
-    request.cls.product_details_page = product_details_page
-    request.cls.helper_tools = helper_tools
-
+    request.cls.home_page = HomePage(driver)
+    request.cls.login_page = LoginPage(driver)
+    request.cls.product_page = ProductPage(driver)
+    request.cls.checkout_page = CheckoutPage(driver)
+    request.cls.success_order_page = SuccessOrderPage(driver)
+    request.cls.search_page = SearchPage(driver)
+    request.cls.product_details_page = ProductDetailsPage(driver)
+    request.cls.helper_tools = HelperTools()
     yield
     driver.quit()
 
@@ -104,6 +93,8 @@ class TestProduct:
             assert product_quantity_from_details[0] == product_quantity
             assert product_price_from_details[0][0] == unit_product_price_for_assertion
             assert product_price_from_details[0][1] == total_product_price
+            self.helper_tools.take_screenshot(self.driver, test_name)
+
 
     # tc 4
     @allure.title("Remove a Product from the Shopping Cart")
@@ -153,6 +144,8 @@ class TestProduct:
         with allure.step("Verify product name contains search text"):
             product_name = self.product_details_page.get_product_name()
             assert search_text.lower() in product_name.lower()
+            self.helper_tools.take_screenshot(self.driver, test_name)
+
 
     # tc 7
     @allure.title("Verify Sorting Products by Price")
@@ -180,4 +173,6 @@ class TestProduct:
 
         with allure.step("Verify that products are sorted in descending order"):
             assert self.product_page.are_products_sorted_desc_by_price()
+            self.helper_tools.take_screenshot(self.driver, test_name)
+
 
